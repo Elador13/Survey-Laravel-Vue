@@ -14,7 +14,8 @@ const store = createStore({
       },
     surveys: {
       loading: false,
-      data: []
+      data: [],
+      links: []
     },
     questionTypes: ['text', 'select', 'radio', 'checkbox', 'textarea'],
     notification: {
@@ -25,9 +26,10 @@ const store = createStore({
   },
   getters: {},
   actions: {
-    getSurveys({commit}) {
+    getSurveys({commit}, {url = null} = {}) {
+      url = url || '/survey'
       commit('setSurveysLoading', true);
-      return axiosClient.get('/survey').then((res) => {
+      return axiosClient.get(url).then((res) => {
         commit('setSurveysLoading', false);
         commit('setSurveys', res.data);
         return res;
@@ -37,6 +39,20 @@ const store = createStore({
       commit('setCurrentSurveyLoading', true);
       return axiosClient
         .get(`/survey/${id}`)
+        .then((res) => {
+          commit('setCurrentSurvey', res.data);
+          commit('setCurrentSurveyLoading', false);
+          return res;
+        })
+        .catch((err) => {
+          commit('setCurrentSurveyLoading', false);
+          throw err;
+        })
+    },
+    getSurveyBySlug({ commit }, slug) {
+      commit('setCurrentSurveyLoading', true);
+      return axiosClient
+        .get(`/survey-by-slug/${slug}`)
         .then((res) => {
           commit('setCurrentSurvey', res.data);
           commit('setCurrentSurveyLoading', false);
@@ -103,6 +119,7 @@ const store = createStore({
       state.surveys.loading = loading
     },
     setSurveys: (state, surveys) => {
+      state.surveys.links = surveys.meta.links;
       state.surveys.data = surveys.data;
     },
     logout: (state) => {
