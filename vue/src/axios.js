@@ -1,8 +1,10 @@
 import axios from "axios";
 import store from "./store"
 
+
+
 const axiosClient = axios.create({
-  baseURL: "http://laravel-survey/api",
+  baseURL: `${import.meta.env.VITE_API_BASE_URL}/api`,
 });
 
 // Інтерцептор - для того, щоб в кожен запрос додати заголовок з токеном
