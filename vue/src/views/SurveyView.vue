@@ -5,13 +5,28 @@
         <h1 class="text-3xl font-bold text-gray-900">
           {{ route.params.id ? model.title : "Create a Survey" }}
         </h1>
-        <button @click="deleteSurvey()" v-if="route.params.id"
-        type="button"
-        class="py-2 px-3 text-white bg-red-500 rounded-md hover:bg-red-600">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 -mt-1 inline-block" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+        <button
+          @click="deleteSurvey()"
+          v-if="route.params.id"
+          type="button"
+          class="py-2 px-3 text-white bg-red-500 rounded-md hover:bg-red-600"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-5 w-5 -mt-1 inline-block"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+            />
           </svg>
-          Delete Survey</button>
+          Delete Survey
+        </button>
       </div>
     </template>
     <div v-if="surveyLoading" class="flex justify-center">Loading...</div>
@@ -82,7 +97,7 @@
 
           <!--Description-->
           <div>
-            <label for="about" class="block text-sm font-medium text-gray-700">
+            <label class="block text-sm font-medium text-gray-700">
               Description
             </label>
             <div class="mt-1">
@@ -182,7 +197,29 @@
               />
             </div>
           </div>
-
+          <!-- Add new question -->
+          <div class="flex items-center justify-center" style="margin-top: 0">
+            <button
+              type="button"
+              @click="addQuestion()"
+              class="flex items-center text-xl py-1 px-4 rounded-sm text-white bg-gray-600 hover:bg-gray-700"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-6 w-6"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+              Add Question
+            </button>
+          </div>
+          <!--/ Add new question -->
           <!--Button-->
           <div class="px-4 py-3 bg-gray-50 text-right sm:px-6">
             <button
@@ -199,18 +236,18 @@
 </template>
 
 <script setup>
-import {v4 as uuidv4} from "uuid"
+import { v4 as uuidv4 } from "uuid";
 import store from "../store";
 import { useRoute, useRouter } from "vue-router";
-import {computed, ref, watch} from "vue";
+import { computed, ref, watch } from "vue";
 
 import PageComponent from "../components/PageComponent.vue";
-import QuestionEditor from "../components/editor/QuestionEditor.vue"
+import QuestionEditor from "../components/editor/QuestionEditor.vue";
 
 const route = useRoute();
 const router = useRouter();
 
-const surveyLoading = computed(() => store.state.currentSurvey.loading)
+const surveyLoading = computed(() => store.state.currentSurvey.loading);
 
 let model = ref({
   title: "",
@@ -229,12 +266,12 @@ watch(
     model.value = {
       ...JSON.parse(JSON.stringify(newVal)),
       status: !!newVal.status,
-    }
+    };
   }
-)
+);
 
 if (route.params.id) {
-  store.dispatch('getSurvey', route.params.id);
+  store.dispatch("getSurvey", route.params.id);
 }
 
 function onImageChoose(ev) {
@@ -247,19 +284,19 @@ function onImageChoose(ev) {
 
     //The field to display here
     model.value.image_url = reader.result;
-  }
+  };
   reader.readAsDataURL(file);
 }
 
 function addQuestion(index) {
   const newQuestion = {
     id: uuidv4(),
-    type: 'text',
+    type: "text",
     description: null,
-    data: {}
+    data: {},
   };
-
-  model.value.questions.splice(index, 0, newQuestion);
+  model.value.questions.push(newQuestion);
+  // model.value.questions.splice(index, 0, newQuestion);
 }
 
 function deleteQuestion(question) {
@@ -269,32 +306,30 @@ function deleteQuestion(question) {
 function changeQuestion(question) {
   model.value.questions = model.value.questions.map((q) => {
     if (q.id === question.id) {
-      return JSON.parse(JSON.stringify(question))
+      return JSON.parse(JSON.stringify(question));
     }
     return q;
   });
 }
 
 function saveSurvey() {
-  store.dispatch("saveSurvey", model.value)
-    .then(({data}) => {
-      store.commit('notify', {
-        type: 'success',
-        message: 'Survey was successfully updated'
-      })
-      router.push({
-        name: 'SurveyView',
-        params: {id: data.data.id}
-      })
-    })
+  store.dispatch("saveSurvey", model.value).then(({ data }) => {
+    store.commit("notify", {
+      type: "success",
+      message: "Survey was successfully updated",
+    });
+    router.push({
+      name: "SurveyView",
+      params: { id: data.data.id },
+    });
+  });
 }
 
 function deleteSurvey() {
-  if (confirm('Are you really want to delete this Survey?')) {
-    store.dispatch('deleteSurvey', model.value.id)
-    .then(() => {
-      router.push({name: 'Surveys'})
-    })
+  if (confirm("Are you really want to delete this Survey?")) {
+    store.dispatch("deleteSurvey", model.value.id).then(() => {
+      router.push({ name: "Surveys" });
+    });
   }
 }
 </script>

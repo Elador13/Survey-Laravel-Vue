@@ -4,7 +4,7 @@
   >
     <img :src="survey.image_url" alt="" class="w-full h-48 object-cover" />
     <h4 class="mt-4 text-lg font-bold">{{ survey.title }}</h4>
-    <div v-html="survey.description"></div>
+    <div class="overflow-hidden" v-html="survey.description"></div>
 
     <div class="flex justify-between items-center mt-3">
       <router-link
