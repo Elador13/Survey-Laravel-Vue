@@ -20,7 +20,7 @@ const routes = [
     redirect: '/dashboard',
     component: DefaultLayout,
     //Вимагає авторизації користувача
-    meta: {requiresAuth: true},
+    meta: {requiresAuth: false},
     children: [
       {path: '/dashboard', name: 'Dashboard', component: Dashboard},
       {path: '/surveys', name: 'Surveys', component: Surveys},
@@ -54,14 +54,14 @@ const router = createRouter({
   routes
 })
 
-router.beforeEach((to, from, next) => {
-  if (to.meta.requiresAuth && !store.state.user.token) {
-    next({name: 'Login'});
-  } else if (store.state.user.token && to.meta.isGuest) {
-    next({name: 'Dashboard'});
-  } else {
-    next();
-  }
-})
+// router.beforeEach((to, from, next) => {
+//   if (to.meta.requiresAuth && !store.state.user.token) {
+//     next({name: 'Login'});
+//   } else if (store.state.user.token && to.meta.isGuest) {
+//     next({name: 'Dashboard'});
+//   } else {
+//     next();
+//   }
+// })
 
 export default router

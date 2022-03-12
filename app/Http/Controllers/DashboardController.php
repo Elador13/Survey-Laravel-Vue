@@ -10,6 +10,11 @@ use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
+//    public function index()
+//    {
+//        return ['1111'];
+//    }
+
     public function index(Request $request)
     {
         $user = $request->user();

@@ -4,7 +4,10 @@ import axiosClient from '../axios'
 const store = createStore({
   state: {
     user: {
-      data: {},
+      data: {
+        name: null,
+        email: null
+      },
       token: sessionStorage.getItem("TOKEN"),
     },
     dashboard: {
@@ -31,8 +34,9 @@ const store = createStore({
   getters: {},
   actions: {
     getDashboardData({commit}) {
+      console.log('test')
       commit('dashboardLoading', true)
-      return axiosClient.get('/dashboard')
+      return axiosClient.get('/api/dashboard')
         .then((res) => {
           commit('dashboardLoading', false)
           commit('setDashboardData', res.data)
@@ -106,15 +110,17 @@ const store = createStore({
     deleteSurvey({}, id) {
       return axiosClient.delete(`/survey/${id}`);
     },
-    register({ commit }, user) {
-      return axiosClient.post('/register', user)
+    async register({ commit }, user) {
+      await axiosClient.get('/sanctum/csrf-cookie')
+      await axiosClient.post('/register', user)
         .then(({data})=> {
           commit('setUser', data);
           return data;
         })
     },
-    login({ commit }, user) {
-      return axiosClient.post('/login', user)
+    async login({ commit }, user) {
+      await axiosClient.get('/sanctum/csrf-cookie')
+      await axiosClient.post('/login', user)
         .then(({data})=> {
           commit('setUser', data);
           return data;

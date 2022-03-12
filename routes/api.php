@@ -21,7 +21,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', function (Request $request) {
         return $request->user();
     });
-    Route::post('/logout', [AuthController::class, 'logout']);
+//    Route::post('/logout', [AuthController::class, 'logout']);
     Route::resource('/survey', SurveyController::class);
 
     Route::get('/dashboard', [DashboardController::class, 'index']);
@@ -30,5 +30,6 @@ Route::middleware('auth:sanctum')->group(function () {
 Route::get('/survey-by-slug/{survey:slug}', [SurveyController::class, 'showForGuest']);
 Route::post('/survey/{survey}/answer', [SurveyController::class, 'storeAnswer']);
 
-Route::post('/register', [AuthController::class, 'register']);
-Route::post('/login', [AuthController::class, 'login']);
+//Route::post('/register', [AuthController::class, 'register']);
+//Route::post('/login', [AuthController::class, 'login']);
+

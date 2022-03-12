@@ -149,15 +149,14 @@ let errorMsg = ref("");
 function login(ev) {
   ev.preventDefault();
   loading.value = true;
-  store
-    .dispatch("login", user)
-    .then(() => {
+  store.dispatch("login", user)
+    .then((res) => {
       loading.value = false;
       router.push({ name: "Dashboard" });
     })
-    .catch((err) => {
+    .catch((error) => {
       loading.value = false;
-      errorMsg.value = err.response.data.error;
+      errorMsg.value = error.response.data.message;
     });
 }
 </script>
