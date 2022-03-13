@@ -21,7 +21,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', function (Request $request) {
         return $request->user();
     });
-//    Route::post('/logout', [AuthController::class, 'logout']);
     Route::resource('/survey', SurveyController::class);
 
     Route::get('/dashboard', [DashboardController::class, 'index']);

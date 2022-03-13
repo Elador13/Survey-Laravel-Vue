@@ -30,14 +30,6 @@ class LoginController extends Controller
      */
     protected $redirectTo = RouteServiceProvider::HOME;
 
-    //Response user data in login response
-    protected function authenticated(Request $request, $user)
-    {
-        //TODO для відкату назад
-        $user = Auth::user();
-        return response(['user'=>$user]);
-    }
-
     /**
      * Create a new controller instance.
      *

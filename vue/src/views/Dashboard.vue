@@ -2,7 +2,7 @@
   <PageComponent title="Dashboard">
     <div v-if="loading" class="flex justify-center">Loading...</div>
     <div
-      v-else
+      v-else-if="Object.keys(data).length"
       class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 text-gray-700"
     >
       <div
@@ -119,7 +119,7 @@
           </a>
         </div>
 
-        <div v-if="data.latestAnswers.length">
+        <div v-if="data">
           <a
             href="#"
             v-for="answer of data.latestAnswers"

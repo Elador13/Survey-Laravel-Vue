@@ -8,7 +8,7 @@ const store = createStore({
         name: null,
         email: null
       },
-      token: sessionStorage.getItem("TOKEN"),
+      token: localStorage.getItem("X-XSRF-TOKEN"),
     },
     dashboard: {
       loading: false,
@@ -34,7 +34,6 @@ const store = createStore({
   getters: {},
   actions: {
     getDashboardData({commit}) {
-      console.log('test')
       commit('dashboardLoading', true)
       return axiosClient.get('/api/dashboard')
         .then((res) => {
@@ -48,7 +47,7 @@ const store = createStore({
         });
     },
     getSurveys({commit}, {url = null} = {}) {
-      url = url || '/survey'
+      url = url || '/api/survey'
       commit('setSurveysLoading', true);
       return axiosClient.get(url).then((res) => {
         commit('setSurveysLoading', false);
@@ -73,7 +72,7 @@ const store = createStore({
     getSurveyBySlug({ commit }, slug) {
       commit('setCurrentSurveyLoading', true);
       return axiosClient
-        .get(`/survey-by-slug/${slug}`)
+        .get(`/api/survey-by-slug/${slug}`)
         .then((res) => {
           commit('setCurrentSurvey', res.data);
           commit('setCurrentSurveyLoading', false);
@@ -90,14 +89,14 @@ const store = createStore({
       //Update survey
       if (survey.id) {
         response = axiosClient
-          .put(`/survey/${survey.id}`, survey)
+          .put(`/api/survey/${survey.id}`, survey)
           .then((res) => {
             commit('setCurrentSurvey', res.data)
             return res;
           });
       //Create new survey
       } else {
-        response = axiosClient.post('/survey', survey).then((res)=>{
+        response = axiosClient.post('/api/survey', survey).then((res)=>{
           commit('setCurrentSurvey', res.data);
           return res;
         })
@@ -105,10 +104,10 @@ const store = createStore({
       return response;
     },
     saveSurveyAnswer({commit}, {surveyId, answers}) {
-      return axiosClient.post(`/survey/${surveyId}/answer`, {answers})
+      return axiosClient.post(`/api/survey/${surveyId}/answer`, {answers})
     },
     deleteSurvey({}, id) {
-      return axiosClient.delete(`/survey/${id}`);
+      return axiosClient.delete(`/api/survey/${id}`);
     },
     async register({ commit }, user) {
       await axiosClient.get('/sanctum/csrf-cookie')
@@ -118,14 +117,35 @@ const store = createStore({
           return data;
         })
     },
-    async login({ commit }, user) {
+    async login({ commit, dispatch }, user) {
       await axiosClient.get('/sanctum/csrf-cookie')
       await axiosClient.post('/login', user)
-        .then(({data})=> {
-          commit('setUser', data);
-          return data;
+        .then((res)=> {
+          localStorage.setItem('X-XSRF-TOKEN', res.config.headers['X-XSRF-TOKEN'])
+          commit('setToken', res.config.headers['X-XSRF-TOKEN']);
+          return res;
+        })
+      await dispatch('getUser')
+    },
+
+    getUser({commit}) {
+      axiosClient.get('/api/user')
+        .then(({data}) => {
+          commit('setUser', data)
+        })
+        .catch(err => {
+            return err
         })
     },
+
+    // autoLogin({commit}) {
+    //   axiosClient.get('/api/user').then(r => {
+    //     commit('setUser', )
+    //   });
+    //   // if (localStorage.getItem('X-XSRF-TOKEN')) {
+    //   //   commit('setUser', )
+    //   // }
+    // },
     logout({commit}) {
       return axiosClient.post('/logout')
         .then(response => {
@@ -157,12 +177,14 @@ const store = createStore({
     logout: (state) => {
       state.user.data = {};
       state.user.token = null;
-      sessionStorage.removeItem('TOKEN');
+      localStorage.removeItem('X-XSRF-TOKEN');
     },
-    setUser: (state, userData) => {
-      state.user.token = userData.token;
-      state.user.data = userData.user;
-      sessionStorage.setItem("TOKEN", userData.token);
+    setUser: (state, user) => {
+      state.user.data = user;
+    },
+    setToken: (state, token) => {
+      state.user.token = token;
+      localStorage.setItem('X-XSRF-TOKEN', token)
     },
     notify(state, {message, type}) {
       state.notification.show = true;
