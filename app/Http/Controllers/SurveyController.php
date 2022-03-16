@@ -93,6 +93,11 @@ class SurveyController extends Controller
         if ($user->id !== $survey->user_id) {
             return abort(403, 'Unauthorized action');
         }
+//        elseif (!$survey-) {
+//            return response([
+//                'error' => 'The provided credentials are not correct'
+//            ], 422);
+//        }
 
         return new SurveyResource($survey);
     }

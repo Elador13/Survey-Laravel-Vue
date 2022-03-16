@@ -92,10 +92,10 @@
         :class="{'cursor-not-allowed': loading, 'hover-bg-indigo-500': loading}"
       >
         <span class="absolute left-0 inset-y-0 flex items-center pl-3">
-          <LockClosedIcon
-            class="h-5 w-5 text-indigo-500 group-hover:text-indigo-400"
-            aria-hidden="true"
-          />
+<!--          <LockClosedIcon-->
+<!--            class="h-5 w-5 text-indigo-500 group-hover:text-indigo-400"-->
+<!--            aria-hidden="true"-->
+<!--          />-->
         </span>
         <svg
           v-if="loading"

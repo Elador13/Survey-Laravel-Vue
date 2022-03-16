@@ -4,6 +4,7 @@ import Surveys from "../views/Surveys.vue";
 import SurveyView from "../views/SurveyView.vue";
 import Login from "../views/Login.vue";
 import Register from "../views/Register.vue";
+import Page404 from "../views/Page404.vue"
 import DefaultLayout from "../components/DefaultLayout.vue";
 import AuthLayout from "../components/AuthLayout.vue";
 import SurveyPublicView from "../views/SurveyPublicView.vue";
@@ -47,6 +48,11 @@ const routes = [
       },
     ]
   },
+  {
+    path: '/:pathMatch(.*)*',
+    name: 'Page404',
+    component: Page404
+  }
 ];
 
 const router = createRouter({
@@ -55,9 +61,10 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  if (to.meta.requiresAuth && !store.state.user.token) {
+  let token = localStorage.getItem('access_token');
+  if (to.meta.requiresAuth && !token) {
     next({name: 'Login'});
-  } else if (store.state.user.token && to.meta.isGuest) {
+  } else if (token && to.meta.isGuest) {
     next({name: 'Dashboard'});
   } else {
     next();

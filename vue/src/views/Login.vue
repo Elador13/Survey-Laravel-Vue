@@ -43,7 +43,7 @@
         </svg>
       </span>
     </Alert>
-    <input type="hidden" name="remember" value="true" />
+<!--    <input type="hidden" name="remember" value="true" />-->
     <div class="rounded-md shadow-sm -space-y-px">
       <div>
         <label for="email-address" class="sr-only">Email address</label>
@@ -73,20 +73,20 @@
       </div>
     </div>
 
-    <div class="flex items-center justify-between">
-      <div class="flex items-center">
-        <input
-          v-model="user.remember"
-          id="remember-me"
-          name="remember-me"
-          type="checkbox"
-          class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
-        />
-        <label for="remember-me" class="ml-2 block text-sm text-gray-900">
-          Remember me
-        </label>
-      </div>
-    </div>
+<!--    <div class="flex items-center justify-between">-->
+<!--      <div class="flex items-center">-->
+<!--        <input-->
+<!--          v-model="user.remember"-->
+<!--          id="remember-me"-->
+<!--          name="remember-me"-->
+<!--          type="checkbox"-->
+<!--          class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"-->
+<!--        />-->
+<!--        <label for="remember-me" class="ml-2 block text-sm text-gray-900">-->
+<!--          Remember me-->
+<!--        </label>-->
+<!--      </div>-->
+<!--    </div>-->
 
     <div>
       <button
@@ -96,10 +96,10 @@
         :class="{'cursor-not-allowed': loading, 'hover-bg-indigo-500': loading}"
       >
         <span class="absolute left-0 inset-y-0 flex items-center pl-3">
-          <LockClosedIcon
-            class="h-5 w-5 text-indigo-500 group-hover:text-indigo-400"
-            aria-hidden="true"
-          />
+<!--          <LockClosedIcon-->
+<!--            class="h-5 w-5 text-indigo-500 group-hover:text-indigo-400"-->
+<!--            aria-hidden="true"-->
+<!--          />-->
         </span>
         <svg
           v-if="loading"

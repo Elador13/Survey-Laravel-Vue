@@ -63,7 +63,7 @@ const survey = computed(() => store.state.currentSurvey.data);
 const surveyFinished = ref(false);
 const answers = ref({});
 
-store.dispatch('getSurveyBySlug', route.params.slug)
+store.dispatch('getSurveyBySlug', route.params.slug).catch(err => {});
 
 function submitSurvey() {
   console.log(JSON.stringify(answers.value, undefined, 2));

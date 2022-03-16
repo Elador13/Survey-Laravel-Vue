@@ -17,18 +17,31 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/user', function (Request $request) {
-        return $request->user();
-    });
-    Route::post('/logout', [AuthController::class, 'logout']);
-    Route::resource('/survey', SurveyController::class);
+//Route::middleware('auth:sanctum')->group(function () {
+//    Route::get('/user', function (Request $request) {
+//        return $request->user();
+//    });
+//    Route::post('/logout', [AuthController::class, 'logout']);
+//    Route::resource('/survey', SurveyController::class);
+//
+//});
 
-    Route::get('/dashboard', [DashboardController::class, 'index']);
-});
-
-Route::get('/survey-by-slug/{survey:slug}', [SurveyController::class, 'showForGuest']);
-Route::post('/survey/{survey}/answer', [SurveyController::class, 'storeAnswer']);
+//Route::get('/survey-by-slug/{survey:slug}', [SurveyController::class, 'showForGuest']);
+//Route::post('/survey/{survey}/answer', [SurveyController::class, 'storeAnswer']);
+//
 
 Route::post('/register', [AuthController::class, 'register']);
-Route::post('/login', [AuthController::class, 'login']);
+Route::get('/survey-by-slug/{survey:slug}', [SurveyController::class, 'showForGuest']);
+
+Route::group(['middleware' => 'api', 'prefix' => 'auth'], function ($router) {
+    Route::post('login', [AuthController::class, 'login']);
+    Route::post('logout', [AuthController::class, 'logout']);
+    Route::post('refresh', [AuthController::class, 'refresh']);
+    Route::post('me', [AuthController::class, 'me']);
+});
+
+Route::group(['middleware' => 'jwt.auth'], function () {
+    Route::get('/dashboard', [DashboardController::class, 'index']);
+    Route::post('/survey/{survey}/answer', [SurveyController::class, 'storeAnswer']);
+    Route::resource('/survey', SurveyController::class);
+});

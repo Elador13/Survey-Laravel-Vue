@@ -5,7 +5,7 @@ const store = createStore({
   state: {
     user: {
       data: {},
-      token: sessionStorage.getItem("TOKEN"),
+      token: localStorage.getItem('access_token'),
     },
     dashboard: {
       loading: false,
@@ -30,9 +30,12 @@ const store = createStore({
   },
   getters: {},
   actions: {
+    getUserFromJWT({commit}) {
+      commit('userFromJWT')
+    },
     getDashboardData({commit}) {
       commit('dashboardLoading', true)
-      return axiosClient.get('/dashboard')
+      return axiosClient.get('/api/dashboard')
         .then((res) => {
           commit('dashboardLoading', false)
           commit('setDashboardData', res.data)
@@ -44,7 +47,7 @@ const store = createStore({
         });
     },
     getSurveys({commit}, {url = null} = {}) {
-      url = url || '/survey'
+      url = url || '/api/survey'
       commit('setSurveysLoading', true);
       return axiosClient.get(url).then((res) => {
         commit('setSurveysLoading', false);
@@ -54,8 +57,7 @@ const store = createStore({
     },
     getSurvey({commit}, id) {
       commit('setCurrentSurveyLoading', true);
-      return axiosClient
-        .get(`/survey/${id}`)
+      return axiosClient.get(`/api/survey/${id}`)
         .then((res) => {
           commit('setCurrentSurvey', res.data);
           commit('setCurrentSurveyLoading', false);
@@ -68,8 +70,7 @@ const store = createStore({
     },
     getSurveyBySlug({ commit }, slug) {
       commit('setCurrentSurveyLoading', true);
-      return axiosClient
-        .get(`/survey-by-slug/${slug}`)
+      return axiosClient.get(`/api/survey-by-slug/${slug}`)
         .then((res) => {
           commit('setCurrentSurvey', res.data);
           commit('setCurrentSurveyLoading', false);
@@ -86,14 +87,14 @@ const store = createStore({
       //Update survey
       if (survey.id) {
         response = axiosClient
-          .put(`/survey/${survey.id}`, survey)
+          .put(`/api/survey/${survey.id}`, survey)
           .then((res) => {
             commit('setCurrentSurvey', res.data)
             return res;
           });
       //Create new survey
       } else {
-        response = axiosClient.post('/survey', survey).then((res)=>{
+        response = axiosClient.post('/api/survey', survey).then((res)=>{
           commit('setCurrentSurvey', res.data);
           return res;
         })
@@ -101,27 +102,31 @@ const store = createStore({
       return response;
     },
     saveSurveyAnswer({commit}, {surveyId, answers}) {
-      return axiosClient.post(`/survey/${surveyId}/answer`, {answers})
+      return axiosClient.post(`/api/survey/${surveyId}/answer`, {answers})
     },
     deleteSurvey({}, id) {
-      return axiosClient.delete(`/survey/${id}`);
+      return axiosClient.delete(`/api/survey/${id}`);
     },
     register({ commit }, user) {
-      return axiosClient.post('/register', user)
+      //TODO автоматична авторизація після реєстрації
+      return axiosClient.post('/api/register', user)
         .then(({data})=> {
           commit('setUser', data);
           return data;
         })
     },
     login({ commit }, user) {
-      return axiosClient.post('/login', user)
-        .then(({data})=> {
-          commit('setUser', data);
-          return data;
-        })
+      return axiosClient.post('/api/auth/login', user)
+        .then((res) => {
+          commit('setToken', res.data['access_token']);
+          commit('setUser', res.data['user']);
+          return res;
+        }).catch(err => {
+          throw err
+        });
     },
     logout({commit}) {
-      return axiosClient.post('/logout')
+      return axiosClient.post('/api/auth/logout')
         .then(response => {
           commit('logout');
           return response;
@@ -129,6 +134,29 @@ const store = createStore({
     }
   },
   mutations: {
+    userFromJWT(state) {
+      try {
+        const {email, name} = JSON.parse(atob(state.user.token.split('.')[1]));
+        store.state.user.data = {
+          email,
+          name
+        }
+      } catch (e) {
+        return {};
+      }
+    },
+    setUser: (state, user) => {
+      state.user.data = user;
+    },
+    setToken: (state, token) => {
+      localStorage.setItem('access_token', token)
+      state.user.token = token;
+    },
+    logout: (state) => {
+      state.user.data = {};
+      state.user.token = null;
+      localStorage.removeItem('access_token');
+    },
     dashboardLoading: (state, loading) => {
       state.dashboard.loading = loading;
     },
@@ -147,16 +175,6 @@ const store = createStore({
     setSurveys: (state, surveys) => {
       state.surveys.links = surveys.meta.links;
       state.surveys.data = surveys.data;
-    },
-    logout: (state) => {
-      state.user.data = {};
-      state.user.token = null;
-      sessionStorage.removeItem('TOKEN');
-    },
-    setUser: (state, userData) => {
-      state.user.token = userData.token;
-      state.user.data = userData.user;
-      sessionStorage.setItem("TOKEN", userData.token);
     },
     notify(state, {message, type}) {
       state.notification.show = true;
