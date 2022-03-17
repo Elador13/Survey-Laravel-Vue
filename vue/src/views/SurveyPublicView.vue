@@ -2,11 +2,11 @@
   <div class="py-8 px-8">
     <div v-if="loading" class="flex justify-center">Loading...</div>
     <form @submit.prevent="submitSurvey" v-else class="container mx-auto">
-      <div class="grid grid-cols-6 items-center">
-        <div class="mr-4">
-          <img :src="survey.image_url" alt="" />
+      <div class="grid sm:grid-cols-1 md:grid-cols-5 lg:grid-cols-6  items-center">
+        <div class="mr-6 col-span-3">
+          <img :src="survey.image_url" alt="" class="w-full h-80 object-cover" />
         </div>
-        <div class="col-span-5">
+        <div class="col-span-3 mt-3">
           <h1 class="text-3xl mb-3">{{ survey.title }}</h1>
           <p class="text-gray-500 text-sm" v-html="survey.description"></p>
         </div>

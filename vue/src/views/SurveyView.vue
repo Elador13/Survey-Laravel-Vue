@@ -43,15 +43,15 @@
         <div class="px-4 py-5 bg-white space-y-6 sm:p-6">
           <!--Image-->
           <div>
-            <label class="block text-sm font-medium text-gray-700">
+            <label class="block text-base font-medium text-gray-700">
               Image
             </label>
-            <div class="mt-1 flex items-center">
+            <div class="mt-1 flex flex-wrap items-center">
               <img
                 v-if="model.image_url"
                 :src="model.image_url"
                 :alt="model.title"
-                class="w-64 h-48 object-cover"
+                class="w-64 h-48 object-cover mr-5 mb-3"
               />
               <span
                 v-else
@@ -74,7 +74,7 @@
               </span>
               <button
                 type="button"
-                class="relative overflow-hidden ml-5 bg-white py-2 px-3 border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                class="relative overflow-hidden bg-white py-2 px-3 border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
               >
                 <input
                   type="file"
@@ -88,7 +88,7 @@
 
           <!--Title-->
           <div>
-            <label for="title" class="block text-sm font-medium text-gray-700"
+            <label for="title" class="block text-base font-medium text-gray-700"
               >Title</label
             >
             <input
@@ -104,7 +104,7 @@
 
           <!--Description-->
           <div>
-            <label class="block text-sm font-medium text-gray-700">
+            <label class="block text-base font-medium text-gray-700">
               Description
             </label>
             <div class="mt-1">
@@ -125,7 +125,7 @@
           <div>
             <label
               for="expire_date"
-              class="block text-sm font-medium text-gray-700"
+              class="block text-base font-medium text-gray-700"
               >Expire Date</label
             >
             <input
@@ -133,13 +133,13 @@
               name="expire_date"
               id="expire_date"
               v-model="model.expire_date"
-              class="mt-1 focus:border-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+              class="mt-1 focus:border-indigo-500 focus:border-indigo-500 block w-40 shadow-base sm:text-sm border-gray-300 rounded-md"
             />
           </div>
           <!-- / Expire Date-->
 
           <!-- Status -->
-          <div class="flex items-start">
+          <div class="flex items-center justify-start">
             <div class="flex items-center h-5">
               <input
                 id="status"
@@ -149,7 +149,7 @@
                 class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
               />
             </div>
-            <div class="ml-3 text-sm">
+            <div class="ml-3 text-base">
               <label for="status" class="font-medium text-gray-700"
                 >Active</label
               >

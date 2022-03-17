@@ -103,7 +103,7 @@
     <!--/ Question -->
 
     <!-- Question Type -->
-    <div class="mt-3 col-span-3">
+    <div class="mt-3 col-span-9 sm:col-span-4 md:col-span-3 lg:col-span-3">
       <label for="question_type" class="block text-sm font-medium text-gray-700"
       >Select Question Type</label
       >

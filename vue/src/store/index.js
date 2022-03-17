@@ -108,10 +108,10 @@ const store = createStore({
       return axiosClient.delete(`/api/survey/${id}`);
     },
     register({ commit }, user) {
-      //TODO автоматична авторизація після реєстрації
       return axiosClient.post('/api/register', user)
         .then(({data})=> {
-          commit('setUser', data);
+          commit('setToken', data.token);
+          commit('setUser', data.user);
           return data;
         })
     },
