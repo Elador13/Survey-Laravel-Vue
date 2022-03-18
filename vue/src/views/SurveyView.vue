@@ -1,3 +1,4 @@
+<!--TODO: додати лоадер на кнопку Save-->
 <template>
   <PageComponent>
     <template v-slot:header>

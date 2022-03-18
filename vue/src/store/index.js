@@ -102,7 +102,7 @@ const store = createStore({
       return response;
     },
     saveSurveyAnswer({commit}, {surveyId, answers}) {
-      return axiosClient.post(`/api/survey/${surveyId}/answer`, {answers})
+      return axiosClient.post(`/api/survey/${surveyId}/response`, {answers})
     },
     deleteSurvey({}, id) {
       return axiosClient.delete(`/api/survey/${id}`);

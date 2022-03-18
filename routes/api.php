@@ -42,7 +42,8 @@ Route::group(['middleware' => 'api', 'prefix' => 'auth'], function ($router) {
 
 Route::group(['middleware' => 'jwt.auth'], function () {
     Route::get('/dashboard', [DashboardController::class, 'index']);
-    Route::post('/survey/{survey}/answer', [SurveyController::class, 'storeAnswer']);
-    Route::get('/survey/{survey}/answers', [SurveyController::class, 'getAnswerForSurvey']);
+    Route::post('/survey/{survey}/response', [SurveyController::class, 'storeResponse']);
+    Route::get('/survey/test/{surveyResponse}', [SurveyController::class, 'getResponse']);
     Route::resource('/survey', SurveyController::class);
+
 });

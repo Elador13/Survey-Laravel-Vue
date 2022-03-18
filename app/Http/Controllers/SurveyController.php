@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreSurveyAnswerRequest;
-use App\Http\Resources\AnswerResource;
+use App\Http\Requests\StoreSurveyResponseRequest;
+use App\Http\Resources\ResponseResource;
 use App\Http\Resources\SurveyResource;
 use App\Models\Survey;
 use App\Http\Requests\StoreSurveyRequest;
 use App\Http\Requests\UpdateSurveyRequest;
-use App\Models\SurveyAnswer;
 use App\Models\SurveyQuestion;
 use App\Models\SurveyQuestionAnswer;
+use App\Models\SurveyResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\File;
@@ -58,17 +58,19 @@ class SurveyController extends Controller
         return new SurveyResource($survey);
     }
 
-    public function storeAnswer(StoreSurveyAnswerRequest $request,Survey $survey)
+    public function storeResponse(StoreSurveyResponseRequest $request,Survey $survey)
     {
         $validated = $request->validated();
 
-        $surveyAnswer = SurveyAnswer::create([
+        //Створюю просто Відповідь на опитування (без питань->відповідей)
+        $surveyResponse = SurveyResponse::create([
             'survey_id' => $survey->id,
             'start_date' => date('Y-m-d H:i:s'),
             'end_date' => date('Y-m-d H:i:s'),
         ]);
 
-        // key => value : $questionId => $answer
+        //Зберігаю всі відповіді на питання
+        //Ітерація по id питання -> відповідь на нього
         foreach ($validated['answers'] as $questionId => $answer) {
             //Another one validation. Is answer_id === question_id and belongs to original Survey?
             $question = SurveyQuestion::query()->where(['id' => $questionId, 'survey_id' => $survey->id])->get();
@@ -78,7 +80,7 @@ class SurveyController extends Controller
 
             $data = [
                 'survey_question_id' => $questionId,
-                'survey_answer_id' => $surveyAnswer->id,
+                'survey_response_id' => $surveyResponse->id,
                 'answer' => is_array($answer) ? json_encode($answer) : $answer
             ];
 
@@ -267,23 +269,25 @@ class SurveyController extends Controller
         return $question->update($validator->validated());
     }
 
-    public function getAnswerForSurvey(Survey $survey, SurveyAnswer $surveyAnswer, Request $request)
+    public function getResponse(SurveyResponse $surveyResponse)
     {
-        $answers = $survey->answers()->pluck('id')->toArray();
-        $user = $request->user();
-//
-//        if ($user->id !== $survey->user_id) {
-//            return abort(403, 'Unauthorized action');
-//        }
-//
-        $allAnswers = SurveyAnswer::query()
-            ->join('surveys', 'survey_answers.survey_id', '=', 'surveys.id')
-            ->where('surveys.user_id', $user->id)
-            ->orderBy('end_date', 'DESC')
-            ->getModels('survey_answers.*');
+//        $survey_id = SurveyResponse::query()->first()->survey->id;
+//        $questions = Survey::query()->find($survey_id)->questions;
 
-        $user = $request->user();
+        $questions = $surveyResponse->query()
+            ->join('surveys', 'survey_responses.survey_id', '=', 'surveys.id')
+            ->join('survey_questions', 'surveys.id', '=', 'survey_questions.survey_id')
+            ->join('survey_question_answers', 'survey_question_id', '=', 'survey_questions.id')
+            ->orderBy('survey_questions.id', 'ASC')
+            ->getModels([
+                'survey_responses.id',
+                'surveys.id',
+                'survey_questions.*',
+                'survey_question_answers.*'
+            ]);
 
-        return $allAnswers;
+        return ResponseResource::collection($questions)
+            ->additional(['survey_title' => $surveyResponse->survey->title]);
     }
+
 }

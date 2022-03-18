@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\SurveyAnswerResource;
+use App\Http\Resources\SurveyResponseResource;
 use App\Http\Resources\SurveyResourceDashboard;
+use App\Http\Resources\SurveyResponseResourceDashboard;
 use App\Models\Survey;
-use App\Models\SurveyAnswer;
+use App\Models\SurveyResponse;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller
@@ -24,24 +25,24 @@ class DashboardController extends Controller
             ->first();
 
         // Total number of answers for specific User
-        $totalAnswers = SurveyAnswer::query()
-            ->join('surveys', 'survey_answers.survey_id', '=', 'surveys.id')
+        $totalResponses = SurveyResponse::query()
+            ->join('surveys', 'survey_responses.survey_id', '=', 'surveys.id')
             ->where('surveys.user_id', $user->id)
             ->count();
 
         // Latest 5 answers
-        $latestAnswers = SurveyAnswer::query()
-            ->join('surveys', 'survey_answers.survey_id', '=', 'surveys.id')
+        $latestResponses = SurveyResponse::query()
+            ->join('surveys', 'survey_responses.survey_id', '=', 'surveys.id')
             ->where('surveys.user_id', $user->id)
             ->orderBy('end_date', 'DESC')
             ->limit(5)
-            ->getModels('survey_answers.*');
+            ->getModels('survey_responses.*');
 
         return [
             'totalSurveys' => $total,
             'latestSurvey' => $latest ? new SurveyResourceDashboard($latest) : null,
-            'totalAnswers' => $totalAnswers,
-            'latestAnswers' => SurveyAnswerResource::collection($latestAnswers)
+            'totalAnswers' => $totalResponses,
+            'latestAnswers' => SurveyResponseResourceDashboard::collection($latestResponses)
         ];
     }
 }

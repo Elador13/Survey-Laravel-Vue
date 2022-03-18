@@ -25,7 +25,7 @@ class SurveyResourceDashboard extends JsonResource
             'created_at' => (new DateTime($this->created_at))->format('d-m-Y / H:i:s'),
             'expire_date' => $this->expire_date,
             'questions' => $this->questions()->count(),
-            'answers' => $this->answers()->count(),
+            'answers' => $this->responses()->count(),
         ];
     }
 }
