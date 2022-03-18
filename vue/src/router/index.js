@@ -8,6 +8,7 @@ import Page404 from "../views/Page404.vue"
 import DefaultLayout from "../components/DefaultLayout.vue";
 import AuthLayout from "../components/AuthLayout.vue";
 import SurveyPublicView from "../views/SurveyPublicView.vue";
+import SurveyAnswerView from "../views/SurveyAnswerView.vue";
 import store from "../store";
 
 const routes = [
@@ -26,7 +27,8 @@ const routes = [
       {path: '/dashboard', name: 'Dashboard', component: Dashboard},
       {path: '/surveys', name: 'Surveys', component: Surveys},
       {path: '/surveys/create', name: 'SurveyCreate', component: SurveyView},
-      {path: '/surveys/:id', name: 'SurveyView', component: SurveyView}
+      {path: '/surveys/:id', name: 'SurveyView', component: SurveyView},
+      {path: '/surveys/:id/answers', name: 'SurveyAnswerView', component: SurveyAnswerView}
     ]
   },
   {

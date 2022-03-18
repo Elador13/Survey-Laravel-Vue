@@ -1,4 +1,5 @@
 <template>
+<!--  TODO: Змінити модальне вікно після проходження опитування-->
   <div class="py-8 px-8">
     <div v-if="loading" class="flex justify-center">Loading...</div>
     <form @submit.prevent="submitSurvey" v-else class="container mx-auto">
@@ -66,7 +67,7 @@ const answers = ref({});
 store.dispatch('getSurveyBySlug', route.params.slug).catch(err => {});
 
 function submitSurvey() {
-  console.log(JSON.stringify(answers.value, undefined, 2));
+  // console.log(JSON.stringify(answers.value, undefined, 2));
   store.dispatch('saveSurveyAnswer', {
     surveyId: survey.value.id,
     answers: answers.value

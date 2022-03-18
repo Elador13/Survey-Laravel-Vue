@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreSurveyAnswerRequest;
+use App\Http\Resources\AnswerResource;
 use App\Http\Resources\SurveyResource;
 use App\Models\Survey;
 use App\Http\Requests\StoreSurveyRequest;
@@ -93,7 +94,7 @@ class SurveyController extends Controller
         if ($user->id !== $survey->user_id) {
             return abort(403, 'Unauthorized action');
         }
-//        elseif (!$survey-) {
+//        elseif (!$survey) {
 //            return response([
 //                'error' => 'The provided credentials are not correct'
 //            ], 422);
@@ -264,5 +265,25 @@ class SurveyController extends Controller
         ]);
 
         return $question->update($validator->validated());
+    }
+
+    public function getAnswerForSurvey(Survey $survey, SurveyAnswer $surveyAnswer, Request $request)
+    {
+        $answers = $survey->answers()->pluck('id')->toArray();
+        $user = $request->user();
+//
+//        if ($user->id !== $survey->user_id) {
+//            return abort(403, 'Unauthorized action');
+//        }
+//
+        $allAnswers = SurveyAnswer::query()
+            ->join('surveys', 'survey_answers.survey_id', '=', 'surveys.id')
+            ->where('surveys.user_id', $user->id)
+            ->orderBy('end_date', 'DESC')
+            ->getModels('survey_answers.*');
+
+        $user = $request->user();
+
+        return $allAnswers;
     }
 }

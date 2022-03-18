@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+//Окреме запитання до окремого опитування (має id - опитування)
 class SurveyQuestion extends Model
 {
     use HasFactory;
@@ -14,5 +15,11 @@ class SurveyQuestion extends Model
     public function survey()
     {
         return $this->belongsTo(Survey::class);
+    }
+
+    //Отримати відповідь на опитування
+    public function response()
+    {
+        return $this->hasOne(SurveyResponse::class);
     }
 }

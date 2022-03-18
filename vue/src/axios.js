@@ -4,7 +4,8 @@ import router from "./router";
 
 const axiosClient = axios.create({
   baseURL: `${import.meta.env.VITE_API_BASE_URL}`,
-  // withCredentials: true
+  // TODO: для прокидання куки XDEBUG
+  withCredentials: true
 });
 
 // Інтерцептор - для того, щоб в кожен запрос додати заголовок з токеном
