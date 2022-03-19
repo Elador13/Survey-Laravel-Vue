@@ -18,7 +18,12 @@ class SurveyResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'image_url' => $this->image ? URL::to($this->image) : null,
+            //TODO: Змінено шлях до зображення для тестових даних
+                //original
+//            'image_url' => $this->image ? URL::to($this->image) : null,
+                //fake data
+            'image_url' => $this->image ? "http://localhost/images/" . $this->image : null,
+
             'title' => $this->title,
             'slug' => $this->slug,
             'status' => !!$this->status,

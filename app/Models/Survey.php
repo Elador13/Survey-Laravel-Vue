@@ -30,6 +30,11 @@ class Survey extends Model
             ->saveSlugsTo('slug');
     }
 
+    public function surveyQuestion()
+    {
+        return $this->hasMany(SurveyQuestion::class);
+    }
+
     public function questions()
     {
         return $this->hasMany(SurveyQuestion::class);
@@ -38,5 +43,10 @@ class Survey extends Model
     public function responses()
     {
         return $this->hasMany(SurveyResponse::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }
