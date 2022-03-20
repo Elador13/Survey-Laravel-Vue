@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreSurveyResponseRequest;
 use App\Http\Resources\ResponseResource;
+use App\Http\Resources\ResponseResourceCollection;
 use App\Http\Resources\SurveyResource;
 use App\Models\Survey;
 use App\Http\Requests\StoreSurveyRequest;
@@ -281,24 +282,32 @@ class SurveyController extends Controller
         $questions = $surveyResponse->query()
             ->join('surveys', 'survey_responses.survey_id', '=', 'surveys.id')
             ->join('survey_questions', 'surveys.id', '=', 'survey_questions.survey_id')
-            ->join('survey_question_answers', 'survey_question_id', '=', 'survey_questions.id')
-            ->orderBy('survey_questions.id', 'ASC')
+//            ->join('survey_question_answers', 'survey_question_id', '=', 'survey_questions.id')
             ->getModels([
-                'survey_responses.id',
-                'surveys.id',
+                'survey_responses.*',
+                'surveys.*',
                 'survey_questions.*',
-                'survey_question_answers.*'
             ]);
 
-        return ResponseResource::collection($questions)
-            ->additional(['survey_title' => $surveyResponse->survey->title]);
+//        return response()->json($questions);
+
+        return ResponseResource::collection($questions);
+
     }
+
 
     public function getResponsesForSurvey(Survey $survey)
     {
-        $allResponses = $survey->responses;
+        $allResponses = $survey->responses()->get(['id', 'survey_id', 'respondent_name', 'respondent_email', 'created_at']);
 
         return response()->json(['survey' => $survey, 'responses' => $allResponses]);
+    }
+
+    public function getResultsForResponse(Survey $survey, SurveyResponse $surveyResponse)
+    {
+        $answers = $surveyResponse->answers;
+
+        return ResponseResource::collection($answers);
     }
 
 }

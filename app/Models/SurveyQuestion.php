@@ -18,7 +18,7 @@ class SurveyQuestion extends Model
     }
 
     //Отримати відповідь на опитування
-    public function answer()
+    public function answers()
     {
         return $this->hasMany(SurveyQuestionAnswer::class);
     }

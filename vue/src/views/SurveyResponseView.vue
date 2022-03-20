@@ -6,42 +6,22 @@
     </svg>
   </div>
 
-  <PageComponent v-else>
+  <PageComponent>
     <template v-slot:header>
       <div class="flex items-center justify-start">
         <h1 class="text-3xl font-bold text-gray-400 pr-3">Survey:</h1>
         <h1 class="text-3xl font-bold text-gray-900">
-          {{ survey ? survey.title : "Survey response" }}
+          Test
+<!--          {{ survey ? survey.title : "Survey response" }}-->
         </h1>
       </div>
     </template>
 
-
-    <div v-if="responses.length" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mt-4 w-full">
-      <ResponseCard
-        v-for="response in responses"
-        @click="$router.push({ name: 'SurveyResponseView', params: { respId: response.id } })"
-        :key="response.id"
-        :name="response.respondent_name"
-        :email="response.respondent_email"
-        :date="response.created_at"
-        :respId="response.id"
-      ></ResponseCard>
-
-
-<!--      <GDialog v-model="dialogState">-->
-<!--        {{responses[0]}}-->
-<!--      </GDialog>-->
-
-<!--      <button @click="dialogState = true">-->
-<!--        Open Dialog-->
-<!--      </button>-->
-
-    </div>
-
-    <p v-else>No one has been interviewed yet</p>
+    <div v-for="result in results">{{result.question}}: {{result.answer}}</div>
 
   </PageComponent>
+
+
 </template>
 
 <script setup>
@@ -58,10 +38,9 @@ const route = useRoute();
 const store = useStore();
 
 const dialogState = ref(false)
-// const props = defineProps({id: String, title: String})
 
 const survey = ref({})
-const responses = ref([])
+const results = ref([])
 
 const loading = ref(false)
 
@@ -72,10 +51,9 @@ const answers = ref({});
 
 onMounted(() => {
   loading.value = true
-  axiosClient.get(`/api/survey/${route.params.id}/responses`)
+  axiosClient.get(`/api/survey/${route.params.id}/responses/${route.params.respId}`)
     .then((res) => {
-      responses.value = res.data['responses']
-      survey.value = res.data
+      results.value = res.data.data
       loading.value = false
     })
     .catch((err) => {

@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\SurveyQuestion;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class ResponseResource extends JsonResource
@@ -14,11 +15,13 @@ class ResponseResource extends JsonResource
      */
     public function toArray($request)
     {
+        $question = SurveyQuestion::query()->find($this->id);
+
         return [
-            'survey_response_id' => $this->survey_response_id,
-            'survey_id' => $this->survey_id,
-            'survey_question_id' => $this->survey_question_id,
-            'question' => $this->question,
+            'question_id' => $question->id,
+            'question' => $question->question,
+            'question_description' => $question->description,
+            'answer_id' => $this->id,
             'answer' => $this->answer
         ];
     }
