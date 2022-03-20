@@ -37,7 +37,8 @@ axiosClient.interceptors.response.use(
         return axiosClient.request(error.config)
       });
     }
-    else if (error.response.data.message === 'Token not provided') {
+    else if (error.response.data.message === 'Token not provided' || error.response.data.message === 'User not found') {
+      localStorage.removeItem('access_token')
       router.push({name: 'Login'});
     }
     else if (error.response.status === 404) {

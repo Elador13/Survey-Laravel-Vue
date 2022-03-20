@@ -24,7 +24,10 @@ class StoreSurveyResponseRequest extends FormRequest
     public function rules()
     {
         return [
-            'answers' => 'required|array'
+            'answers' => 'required|array',
+            'respondent' => 'array:name,email|nullable',
+            'respondent.name' => 'required|string|max:40',
+            'respondent.email' => 'email|nullable|max:50'
         ];
     }
 }

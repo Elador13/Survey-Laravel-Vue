@@ -14,7 +14,6 @@ class ResponseResourceCollection extends ResourceCollection
      */
     public function toArray($request)
     {
-        $test = null;
         return [
             'data' => $this->collection,
         ];

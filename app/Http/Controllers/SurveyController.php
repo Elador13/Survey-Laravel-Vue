@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
+use function GuzzleHttp\Promise\all;
 
 class SurveyController extends Controller
 {
@@ -28,7 +29,7 @@ class SurveyController extends Controller
     public function index(Request $request)
     {
         $user = $request->user();
-        return SurveyResource::collection(Survey::query()->where('user_id', $user->id)->paginate(5));
+        return SurveyResource::collection(Survey::query()->where('user_id', $user->id)->paginate(6));
     }
 
     /**
@@ -61,10 +62,13 @@ class SurveyController extends Controller
     public function storeResponse(StoreSurveyResponseRequest $request,Survey $survey)
     {
         $validated = $request->validated();
+//        $respondent_email = $validated['respondent']['email'] ?? null;
 
         //Створюю просто Відповідь на опитування (без питань->відповідей)
         $surveyResponse = SurveyResponse::create([
             'survey_id' => $survey->id,
+            'respondent_name' => $validated['respondent']['name'],
+            'respondent_email' => $validated['respondent']['email'] ?? null,
             'start_date' => date('Y-m-d H:i:s'),
             'end_date' => date('Y-m-d H:i:s'),
         ]);
@@ -269,7 +273,7 @@ class SurveyController extends Controller
         return $question->update($validator->validated());
     }
 
-    public function getResponse(SurveyResponse $surveyResponse)
+    public function getResponses(Survey $survey, SurveyResponse $surveyResponse)
     {
 //        $survey_id = SurveyResponse::query()->first()->survey->id;
 //        $questions = Survey::query()->find($survey_id)->questions;
@@ -288,6 +292,13 @@ class SurveyController extends Controller
 
         return ResponseResource::collection($questions)
             ->additional(['survey_title' => $surveyResponse->survey->title]);
+    }
+
+    public function getResponsesForSurvey(Survey $survey)
+    {
+        $allResponses = $survey->responses;
+
+        return response()->json(['survey' => $survey, 'responses' => $allResponses]);
     }
 
 }

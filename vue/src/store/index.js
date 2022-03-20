@@ -28,8 +28,22 @@ const store = createStore({
       type: null
     }
   },
-  getters: {},
+  getters: {
+    // getSurveyById: (state) => (id) => {
+    //   return state.surveys.data.find(survey => survey.id === id)
+    // }
+  },
   actions: {
+    getResponsesForSurvey({commit}, id) {
+      return axiosClient.get(`/api/survey/${id}/responses`)
+        .then((res) => {
+          return res;
+        })
+        .catch((err) => {
+          commit('setCurrentSurveyLoading', false);
+          throw err;
+        })
+    },
     getUserFromJWT({commit}) {
       commit('userFromJWT')
     },
@@ -101,8 +115,8 @@ const store = createStore({
       }
       return response;
     },
-    saveSurveyAnswer({commit}, {surveyId, answers}) {
-      return axiosClient.post(`/api/survey/${surveyId}/response`, {answers})
+    saveSurveyAnswer({commit}, {surveyId, respondent, answers}) {
+      return axiosClient.post(`/api/survey/${surveyId}/response`, {answers, respondent})
     },
     deleteSurvey({}, id) {
       return axiosClient.delete(`/api/survey/${id}`);

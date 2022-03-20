@@ -9,10 +9,10 @@ class SurveyResponse extends Model
 {
     use HasFactory;
 
-    const CREATED_AT = null;
-    const UPDATED_AT = null;
+//    const CREATED_AT = null;
+//    const UPDATED_AT = null;
 
-    protected $fillable = ['survey_id', 'start_date', 'end_date'];
+    protected $fillable = ['respondent_name', 'respondent_email', 'survey_id', 'start_date', 'end_date'];
 
     public function survey()
     {
