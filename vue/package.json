@@ -12,7 +12,6 @@
     "@heroicons/vue": "^1.0.5",
     "@tailwindcss/forms": "^0.4.0",
     "axios": "^0.26.0",
-    "gitart-vue-dialog": "^2.0.3",
     "uuidv4": "^6.2.12",
     "vue": "^3.2.25",
     "vue-router": "^4.0.12",

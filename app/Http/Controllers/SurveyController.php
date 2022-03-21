@@ -30,7 +30,7 @@ class SurveyController extends Controller
     public function index(Request $request)
     {
         $user = $request->user();
-        return SurveyResource::collection(Survey::query()->where('user_id', $user->id)->paginate(6));
+        return SurveyResource::collection(Survey::query()->where('user_id', $user->id)->orderBy('id', 'DESC')->paginate(6));
     }
 
     /**
@@ -295,7 +295,6 @@ class SurveyController extends Controller
 
     }
 
-
     public function getResponsesForSurvey(Survey $survey)
     {
         $allResponses = $survey->responses()->get(['id', 'survey_id', 'respondent_name', 'respondent_email', 'created_at']);
@@ -307,7 +306,11 @@ class SurveyController extends Controller
     {
         $answers = $surveyResponse->answers;
 
-        return ResponseResource::collection($answers);
+        return ResponseResource::collection($answers)
+            ->additional([
+                'survey_title' => $survey->title,
+                'respondent_name' => $surveyResponse->respondent_name,
+            ]);
     }
 
 }

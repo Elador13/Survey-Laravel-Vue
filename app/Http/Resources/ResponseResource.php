@@ -15,12 +15,13 @@ class ResponseResource extends JsonResource
      */
     public function toArray($request)
     {
-        $question = SurveyQuestion::query()->find($this->id);
+        $question = SurveyQuestion::query()->find($this->survey_question_id);
 
         return [
             'question_id' => $question->id,
             'question' => $question->question,
             'question_description' => $question->description,
+            'question_type' => $question->type,
             'answer_id' => $this->id,
             'answer' => $this->answer
         ];

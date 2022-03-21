@@ -45,8 +45,6 @@
 </template>
 
 <script setup>
-import 'gitart-vue-dialog/dist/style.css'
-import {GDialog} from "gitart-vue-dialog";
 import {computed, ref, onMounted} from "vue";
 import {useRoute} from "vue-router";
 import {useStore} from "vuex";
@@ -75,7 +73,7 @@ onMounted(() => {
   axiosClient.get(`/api/survey/${route.params.id}/responses`)
     .then((res) => {
       responses.value = res.data['responses']
-      survey.value = res.data
+      survey.value = res.data['survey']
       loading.value = false
     })
     .catch((err) => {

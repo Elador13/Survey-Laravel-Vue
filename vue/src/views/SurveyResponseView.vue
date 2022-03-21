@@ -11,22 +11,39 @@
       <div class="flex items-center justify-start">
         <h1 class="text-3xl font-bold text-gray-400 pr-3">Survey:</h1>
         <h1 class="text-3xl font-bold text-gray-900">
-          Test
-<!--          {{ survey ? survey.title : "Survey response" }}-->
+          {{ surveyTitle ?? "Survey response" }}
         </h1>
       </div>
     </template>
+    <template v-slot:subtitle>
+      <div class="flex items-center justify-start">
+        <h1 class="text-3xl font-bold text-gray-400 pr-3">Respondent:</h1>
+        <h1 class="text-3xl font-bold text-gray-900">{{ respondent }}</h1>
+      </div>
+    </template>
 
-    <div v-for="result in results">{{result.question}}: {{result.answer}}</div>
+
+    <div class="w-auto bg-white rounded-lg shadow">
+      <ul class="divide-y-2 divide-gray-100">
+        <li v-for="result in results" :key="result.answer_id" class="p-3">
+          <div class="flex">
+            <h3 class="text-gray-400 pr-3">Q:</h3>
+            <p class="text-gray-700 font-bold">{{ result.question }}</p>
+          </div>
+          <div class="flex mt-1">
+            <h3 class="text-gray-400 pr-3">A:</h3>
+            <p>{{ result.answer }}</p>
+          </div>
+
+        </li>
+      </ul>
+    </div>
 
   </PageComponent>
-
 
 </template>
 
 <script setup>
-import 'gitart-vue-dialog/dist/style.css'
-import {GDialog} from "gitart-vue-dialog";
 import {computed, ref, onMounted} from "vue";
 import {useRoute} from "vue-router";
 import {useStore} from "vuex";
@@ -39,21 +56,19 @@ const store = useStore();
 
 const dialogState = ref(false)
 
-const survey = ref({})
+const surveyTitle = ref({})
 const results = ref([])
+let respondent = ref('')
 
 const loading = ref(false)
-
-const surveyFinished = ref(false);
-const answers = ref({});
-
-
 
 onMounted(() => {
   loading.value = true
   axiosClient.get(`/api/survey/${route.params.id}/responses/${route.params.respId}`)
     .then((res) => {
       results.value = res.data.data
+      surveyTitle.value = res.data.survey_title
+      respondent.value = res.data.respondent_name
       loading.value = false
     })
     .catch((err) => {
