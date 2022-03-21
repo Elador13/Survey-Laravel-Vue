@@ -295,14 +295,14 @@ class SurveyController extends Controller
 
     }
 
-    public function getResponsesForSurvey(Survey $survey)
+    public function getResponsesForSurvey(Survey $survey): \Illuminate\Http\JsonResponse
     {
         $allResponses = $survey->responses()->get(['id', 'survey_id', 'respondent_name', 'respondent_email', 'created_at']);
 
         return response()->json(['survey' => $survey, 'responses' => $allResponses]);
     }
 
-    public function getResultsForResponse(Survey $survey, SurveyResponse $surveyResponse)
+    public function getResultsForResponse(Survey $survey, SurveyResponse $surveyResponse): \Illuminate\Http\Resources\Json\AnonymousResourceCollection
     {
         $answers = $surveyResponse->answers;
 

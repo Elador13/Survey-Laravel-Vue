@@ -23,7 +23,7 @@ class ResponseResource extends JsonResource
             'question_description' => $question->description,
             'question_type' => $question->type,
             'answer_id' => $this->id,
-            'answer' => $this->answer
+            'answer' => json_decode($this->answer) ? json_decode($this->answer) : $this->answer
         ];
     }
 }

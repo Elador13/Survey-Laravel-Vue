@@ -67,6 +67,13 @@ onMounted(() => {
   axiosClient.get(`/api/survey/${route.params.id}/responses/${route.params.respId}`)
     .then((res) => {
       results.value = res.data.data
+      //TODO: оптимізувати форматування (map)
+      results.value.forEach((result) => {
+        if (typeof result.answer === 'object') {
+          result.answer = result.answer.join(', ');
+        }
+      });
+
       surveyTitle.value = res.data.survey_title
       respondent.value = res.data.respondent_name
       loading.value = false
@@ -75,6 +82,8 @@ onMounted(() => {
       loading.value = true
       throw err;
     })
+
+
 });
 
 // store.dispatch('getResponsesForSurvey', route.params.id)
