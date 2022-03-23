@@ -1,4 +1,7 @@
 <template>
+
+  <SaveModal v-show="showModal" @close-modal="showModal = false" />
+
 <!--  TODO: Змінити модальне вікно після проходження опитування-->
   <div v-if="loading" class="h-screen flex items-center justify-center">
     <svg  class="inline-block mr-2 w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -89,9 +92,12 @@ import {computed, ref} from "vue";
 import {useRoute} from "vue-router";
 import {useStore} from "vuex";
 import QuestionViewer from '../components/viewer/QuestionViewer.vue';
+import SaveModal from "../components/core/SaveModal.vue";
 
 const route = useRoute();
 const store = useStore();
+
+const showModal = ref(false)
 
 const loading = computed(() => store.state.currentSurvey.loading);
 const survey = computed(() => store.state.currentSurvey.data);
@@ -111,7 +117,8 @@ function submitSurvey() {
   })
     .then((response) => {
       if (response.status === 201) {
-        surveyFinished.value = true;
+        // surveyFinished.value = true;
+        showModal.value = true
       }
     })
 }

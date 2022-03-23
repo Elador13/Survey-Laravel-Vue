@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreSurveyResponseRequest;
+use App\Http\Resources\AllResponsesResource;
+use App\Http\Resources\AllSurveysResource;
 use App\Http\Resources\ResponseResource;
 use App\Http\Resources\ResponseResourceCollection;
 use App\Http\Resources\SurveyResource;
@@ -12,6 +14,7 @@ use App\Http\Requests\UpdateSurveyRequest;
 use App\Models\SurveyQuestion;
 use App\Models\SurveyQuestionAnswer;
 use App\Models\SurveyResponse;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\File;
@@ -274,26 +277,26 @@ class SurveyController extends Controller
         return $question->update($validator->validated());
     }
 
-    public function getResponses(Survey $survey, SurveyResponse $surveyResponse)
-    {
-//        $survey_id = SurveyResponse::query()->first()->survey->id;
-//        $questions = Survey::query()->find($survey_id)->questions;
-
-        $questions = $surveyResponse->query()
-            ->join('surveys', 'survey_responses.survey_id', '=', 'surveys.id')
-            ->join('survey_questions', 'surveys.id', '=', 'survey_questions.survey_id')
-//            ->join('survey_question_answers', 'survey_question_id', '=', 'survey_questions.id')
-            ->getModels([
-                'survey_responses.*',
-                'surveys.*',
-                'survey_questions.*',
-            ]);
-
-//        return response()->json($questions);
-
-        return ResponseResource::collection($questions);
-
-    }
+//    public function getResponses(Survey $survey, SurveyResponse $surveyResponse)
+//    {
+////        $survey_id = SurveyResponse::query()->first()->survey->id;
+////        $questions = Survey::query()->find($survey_id)->questions;
+//
+//        $questions = $surveyResponse->query()
+//            ->join('surveys', 'survey_responses.survey_id', '=', 'surveys.id')
+//            ->join('survey_questions', 'surveys.id', '=', 'survey_questions.survey_id')
+////            ->join('survey_question_answers', 'survey_question_id', '=', 'survey_questions.id')
+//            ->getModels([
+//                'survey_responses.*',
+//                'surveys.*',
+//                'survey_questions.*',
+//            ]);
+//
+////        return response()->json($questions);
+//
+//        return ResponseResource::collection($questions);
+//
+//    }
 
     public function getResponsesForSurvey(Survey $survey): \Illuminate\Http\JsonResponse
     {
@@ -313,4 +316,17 @@ class SurveyController extends Controller
             ]);
     }
 
+    public function getAllResponses(Request $request)
+    {
+        $user = $request->user();
+        $surveys = Survey::query()
+            ->where('user_id', $user->id)
+            ->has('responses')
+            ->with('responses')
+            ->get();
+
+        return AllResponsesResource::collection($surveys);
+
+//        return AllResponsesResource::collection(SurveyResponse::query()->where('user_id', $user->id));
+    }
 }

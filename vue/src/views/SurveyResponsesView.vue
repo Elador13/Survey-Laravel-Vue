@@ -25,18 +25,9 @@
         :name="response.respondent_name"
         :email="response.respondent_email"
         :date="response.created_at"
+        :id="response.survey_id"
         :respId="response.id"
       ></ResponseCard>
-
-
-<!--      <GDialog v-model="dialogState">-->
-<!--        {{responses[0]}}-->
-<!--      </GDialog>-->
-
-<!--      <button @click="dialogState = true">-->
-<!--        Open Dialog-->
-<!--      </button>-->
-
     </div>
 
     <p v-else>No one has been interviewed yet</p>
