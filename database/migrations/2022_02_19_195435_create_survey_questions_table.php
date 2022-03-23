@@ -15,7 +15,9 @@ class CreateSurveyQuestionsTable extends Migration
     {
         Schema::create('survey_questions', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(\App\Models\Survey::class, 'survey_id');
+            $table->foreignIdFor(\App\Models\Survey::class, 'survey_id')
+                ->constrained()
+                ->cascadeOnDelete();
             $table->string('type', 45);
             $table->string('question', 45);
             $table->longText('description')->nullable();

@@ -15,7 +15,9 @@ class CreateSurveyResponsesTable extends Migration
     {
         Schema::create('survey_responses', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(\App\Models\Survey::class, 'survey_id');
+            $table->foreignIdFor(\App\Models\Survey::class, 'survey_id')
+                ->constrained()
+                ->cascadeOnDelete();
             $table->string('respondent_name', 40)->nullable();
             $table->string('respondent_email', 50)->nullable();
             $table->timestamp('start_date')->nullable();
