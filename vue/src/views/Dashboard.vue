@@ -22,9 +22,11 @@
       v-else
       class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 text-gray-700"
     >
-      <div
+      <router-link
+        tag="div"
         class="bg-white shadow-md p-3 text-center flex flex-col animate-fade-in-down order-1 lg:order-2"
         style="animation-delay: 0.1s"
+        :to="{ name: 'Surveys' }"
       >
         <h3 class="text-2xl font-semibold">Total Surveys</h3>
         <div
@@ -32,12 +34,12 @@
         >
           {{ data.totalSurveys }}
         </div>
-      </div>
+      </router-link>
       <div
         class="bg-white shadow-md p-3 text-center flex flex-col order-2 lg:order-4 animate-fade-in-down"
         style="animation-delay: 0.2s"
       >
-        <h3 class="text-2xl font-semibold">Total Answers</h3>
+        <h3 class="text-2xl font-semibold">Total Responses</h3>
         <div
           class="text-8xl pb-4 font-semibold flex-1 flex items-center justify-center"
         >
@@ -72,7 +74,7 @@
             <div>{{ data.latestSurvey.questions }}</div>
           </div>
           <div class="flex justify-between text-sm mb-3">
-            <div>Answers:</div>
+            <div>Responses:</div>
             <div>{{ data.latestSurvey.answers }}</div>
           </div>
           <div class="flex justify-between">
@@ -100,9 +102,13 @@
             <router-link
               class="flex py-2 px-4 border border-transparent text-sm rounded-md text-indigo-500 hover:bg-indigo-700 hover:text-white transition-colors focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
               :to="{
-                  name: 'SurveyResponsesView',
-                  params: { id: data.latestSurvey.id, title: data.latestSurvey.title},
-                }">
+                name: 'SurveyResponsesView',
+                params: {
+                  id: data.latestSurvey.id,
+                  title: data.latestSurvey.title,
+                },
+              }"
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 class="h-5 w-5 mr-2"
@@ -129,7 +135,7 @@
         style="animation-delay: 0.3s"
       >
         <div class="flex justify-between items-center mb-3 px-2">
-          <h3 class="text-2xl font-semibold">Latest Answers</h3>
+          <h3 class="text-2xl font-semibold">Latest Responses</h3>
 
           <a
             href="javascript:void(0)"
@@ -140,9 +146,6 @@
         </div>
 
         <div v-if="data.latestAnswers.length">
-
-
-
           <a
             href="#"
             v-for="answer of data.latestAnswers"
@@ -151,13 +154,13 @@
           >
             <div class="font-semibold">{{ answer.survey.title }}</div>
             <small>
-              Answer Made at:
+              Response Made at:
               <i class="font-semibold">{{ answer.end_date }}</i>
             </small>
           </a>
         </div>
         <div v-else class="text-gray-600 text-center py-16">
-          Your don't have answers yet
+          Your don't have responses yet
         </div>
       </div>
     </div>

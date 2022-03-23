@@ -1,6 +1,7 @@
 import {createRouter, createWebHistory} from "vue-router";
 import Dashboard from "../views/Dashboard.vue";
 import Surveys from "../views/Surveys.vue";
+import ResponsesView from "../views/ResponsesView.vue";
 import SurveyView from "../views/SurveyView.vue";
 import Login from "../views/Login.vue";
 import Register from "../views/Register.vue";
@@ -30,7 +31,8 @@ const routes = [
       {path: '/surveys/create', name: 'SurveyCreate', component: SurveyView},
       {path: '/surveys/:id', name: 'SurveyView', component: SurveyView},
       {path: '/surveys/:id/responses', name: 'SurveyResponsesView', component: SurveyResponsesView},
-      {path: '/surveys/:id/responses/:respId', name: 'SurveyResponseView', component: SurveyResponseView}
+      {path: '/surveys/:id/responses/:respId', name: 'SurveyResponseView', component: SurveyResponseView},
+      {path: '/responses', name: 'AllResponses', component: ResponsesView},
     ]
   },
   {

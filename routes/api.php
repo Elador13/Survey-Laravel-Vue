@@ -46,6 +46,8 @@ Route::group(['middleware' => 'jwt.auth'], function () {
     Route::get('/survey/{survey}/responses', [SurveyController::class, 'getResponsesForSurvey']);
     Route::get('/survey/{survey}/responses/{surveyResponse}', [SurveyController::class, 'getResultsForResponse']);
     Route::resource('/survey', SurveyController::class);
+    Route::get('/responses', [SurveyController::class, 'getAllResponses']);
+
 
 });
 

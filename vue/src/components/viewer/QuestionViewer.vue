@@ -11,6 +11,7 @@
     <div class="mt-3">
       <div v-if="question.type === 'select'">
         <select
+          required
           :value="modelValue"
           @change="emits('update:modelValue', $event.target.value)"
           class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
@@ -32,6 +33,7 @@
           class="flex items-center"
         >
           <input
+            required
             :id="option.uuid"
             :name="'question' + question.id"
             :value="option.text"
@@ -54,6 +56,7 @@
           class="flex items-center"
         >
           <input
+            :required="checkboxRequired"
             :id="option.uuid"
             v-model="model[option.text]"
             @change="onCheckboxChange"
@@ -70,6 +73,7 @@
       </div>
       <div v-else-if="question.type === 'text'">
         <input
+          required
           type="text"
           :value="modelValue"
           @input="emits('update:modelValue', $event.target.value)"
@@ -78,6 +82,7 @@
       </div>
       <div v-else-if="question.type === 'textarea'">
         <textarea
+          required
           :value="modelValue"
           @input="emits('update:modelValue', $event.target.value)"
           class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
@@ -89,7 +94,7 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, computed } from "vue";
 
 const { question, index, modelValue } = defineProps({
   question: Object,
@@ -106,6 +111,7 @@ if (question.type === "checkbox") {
 
 function onCheckboxChange($event) {
   const selectedOptions = [];
+
   for (let text in model.value) {
     if (model.value[text]) {
       selectedOptions.push(text);
@@ -113,4 +119,8 @@ function onCheckboxChange($event) {
   }
   emits('update:modelValue', selectedOptions);
 }
+
+let checkboxRequired = computed(() => {
+  return !Object.values(model.value).some((item)=>item===true)
+});
 </script>

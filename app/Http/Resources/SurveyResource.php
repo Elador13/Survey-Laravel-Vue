@@ -20,9 +20,9 @@ class SurveyResource extends JsonResource
             'id' => $this->id,
             //TODO: Змінено шлях до зображення для тестових даних
                 //original
-//            'image_url' => $this->image ? URL::to($this->image) : null,
+            'image_url' => $this->image ? URL::to($this->image) : null,
                 //fake data
-            'image_url' => $this->image ? "http://localhost/images/" . $this->image : null,
+//            'image_url' => $this->image ? "http://localhost/images/" . $this->image : null,
 
             'title' => $this->title,
             'slug' => $this->slug,
