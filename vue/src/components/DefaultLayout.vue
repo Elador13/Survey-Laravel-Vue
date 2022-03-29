@@ -220,13 +220,13 @@ export default {
     const router = useRouter();
 
     function logout() {
-      store.dispatch("logout").then(() => {
+      store.dispatch("user/logout").then(() => {
         router.push({ name: "Login" });
       });
     }
 
     return {
-      user: computed(() => store.state.user.data),
+      user: computed(() => store.state.user.user.data),
       navigation,
       logout,
     };

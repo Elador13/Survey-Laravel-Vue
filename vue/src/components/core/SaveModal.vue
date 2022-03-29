@@ -4,7 +4,7 @@
       <div class="modal" @click.stop>
         <img class="check" style="display: inline" src="../../assets/check-icon.png" alt="" />
         <h6>Saved!</h6>
-        <p>Your Details have been saved Successfully</p>
+        <p>Your Response have been saved Successfully</p>
         <button class="inline-flex justify-center mt-5 py-2 px-4 border border-transparent shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Go Home</button>
       </div>
       <div class="close" @click="$emit('close-modal')">

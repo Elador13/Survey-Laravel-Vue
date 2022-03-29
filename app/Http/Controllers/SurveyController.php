@@ -6,7 +6,6 @@ use App\Http\Requests\StoreSurveyResponseRequest;
 use App\Http\Resources\AllResponsesResource;
 use App\Http\Resources\AllSurveysResource;
 use App\Http\Resources\ResponseResource;
-use App\Http\Resources\ResponseResourceCollection;
 use App\Http\Resources\SurveyResource;
 use App\Models\Survey;
 use App\Http\Requests\StoreSurveyRequest;
@@ -17,11 +16,11 @@ use App\Models\SurveyResponse;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
-use function GuzzleHttp\Promise\all;
 
 class SurveyController extends Controller
 {
@@ -32,8 +31,7 @@ class SurveyController extends Controller
      */
     public function index(Request $request)
     {
-        $user = $request->user();
-        return SurveyResource::collection(Survey::query()->where('user_id', $user->id)->orderBy('id', 'DESC')->paginate(6));
+        return AllSurveysResource::collection($request->user()->surveys()->orderBy('id', 'DESC')->paginate(6));
     }
 
     /**

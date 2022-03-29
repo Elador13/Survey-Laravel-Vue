@@ -150,7 +150,7 @@ function login(ev) {
   ev.preventDefault();
   loading.value = true;
   store
-    .dispatch("login", user)
+    .dispatch("user/login", user)
     .then(() => {
       loading.value = false;
       router.push({ name: "Dashboard" });

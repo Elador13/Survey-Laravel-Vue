@@ -277,7 +277,7 @@ import QuestionEditor from "../components/editor/QuestionEditor.vue";
 const route = useRoute();
 const router = useRouter();
 
-const surveyLoading = computed(() => store.state.currentSurvey.loading);
+const surveyLoading = computed(() => store.state.survey.currentSurvey.loading);
 
 let loading = ref(false);
 
@@ -293,7 +293,7 @@ let model = ref({
 // Watch to current survey data change and when this happens we update local model
 watch(
   // whenever this changes
-  () => store.state.currentSurvey.data,
+  () => store.state.survey.currentSurvey.data,
   (newVal, oldVal) => {
     model.value = {
       ...JSON.parse(JSON.stringify(newVal)),
@@ -303,7 +303,7 @@ watch(
 );
 
 if (route.params.id) {
-  store.dispatch("getSurvey", route.params.id)
+  store.dispatch("survey/getSurvey", route.params.id)
     .catch(err => {
       router.push({name: 'Page404'})
     });
@@ -349,8 +349,8 @@ function changeQuestion(question) {
 
 function saveSurvey() {
   loading.value = true;
-  store.dispatch("saveSurvey", model.value).then(({ data }) => {
-    store.commit("notify", {
+  store.dispatch("survey/saveSurvey", model.value).then(({ data }) => {
+    store.commit("survey/notify", {
       type: "success",
       message: "Survey was successfully updated",
     });
@@ -364,7 +364,7 @@ function saveSurvey() {
 
 function deleteSurvey() {
   if (confirm("Are you really want to delete this Survey?")) {
-    store.dispatch("deleteSurvey", model.value.id).then(() => {
+    store.dispatch("survey/deleteSurvey", model.value.id).then(() => {
       router.push({ name: "Surveys" });
     });
   }

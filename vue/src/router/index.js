@@ -11,7 +11,6 @@ import AuthLayout from "../components/AuthLayout.vue";
 import SurveyPublicView from "../views/SurveyPublicView.vue";
 import SurveyResponsesView from "../views/SurveyResponsesView.vue";
 import SurveyResponseView from "../views/SurveyResponseView.vue";
-import store from "../store";
 
 const routes = [
   {

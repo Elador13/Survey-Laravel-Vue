@@ -6,7 +6,7 @@ import './index.css'
 
 let app = createApp(App).use(store).use(router)
 
-store.dispatch('getUserFromJWT')
+store.dispatch('user/getUserFromJWT')
   .then(() => {
     app.mount('#app');
   });

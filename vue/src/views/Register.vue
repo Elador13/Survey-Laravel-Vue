@@ -146,7 +146,7 @@ function register(ev) {
   ev.preventDefault();
 
   loading.value = true;
-  store.dispatch('register', user)
+  store.dispatch('user/register', user)
     .then((res) => {
       loading.value = false;
       router.push({name: 'Dashboard'})

@@ -67,7 +67,6 @@ onMounted(() => {
   axiosClient.get(`/api/survey/${route.params.id}/responses/${route.params.respId}`)
     .then((res) => {
       results.value = res.data.data
-      //TODO: оптимізувати форматування (map)
       results.value.forEach((result) => {
         if (typeof result.answer === 'object') {
           result.answer = result.answer.join(', ');

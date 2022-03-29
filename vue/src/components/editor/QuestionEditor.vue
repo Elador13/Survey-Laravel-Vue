@@ -281,7 +281,7 @@ const emit = defineEmits(["change", "addQuestion", "deleteQuestion"]);
 // Re-create the whole question data to avoid unintentional reference change
 const model = ref(JSON.parse(JSON.stringify(props.question)));
 
-const questionTypes = computed(() => store.state.questionTypes);
+const questionTypes = computed(() => store.state.survey.questionTypes);
 
 function upperCaseFirst(str) {
   return str.charAt(0).toUpperCase() + str.slice(1)
@@ -330,10 +330,10 @@ function dataChange() {
 }
 
 function addQuestion() {
-  emit("addQuestion", props.index + 1);
+  emit("survey/addQuestion", props.index + 1);
 }
 function deleteQuestion() {
-  emit("deleteQuestion", props.question);
+  emit("survey/deleteQuestion", props.question);
 }
 
 </script>

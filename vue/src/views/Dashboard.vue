@@ -1,5 +1,4 @@
 <template>
-  <!--  TODO: Додати посилання на сторінки в Дашборді-->
   <PageComponent title="Dashboard">
     <div v-if="loading" class="text-center">
       <svg
@@ -24,7 +23,7 @@
     >
       <router-link
         tag="div"
-        class="bg-white shadow-md p-3 text-center flex flex-col animate-fade-in-down order-1 lg:order-2"
+        class="bg-white shadow-md p-3 text-center flex flex-col animate-fade-in-down order-1 lg:order-2 hover:bg-gray-50"
         style="animation-delay: 0.1s"
         :to="{ name: 'Surveys' }"
       >
@@ -35,9 +34,12 @@
           {{ data.totalSurveys }}
         </div>
       </router-link>
-      <div
-        class="bg-white shadow-md p-3 text-center flex flex-col order-2 lg:order-4 animate-fade-in-down"
+
+      <router-link
+        tag="div"
+        class="bg-white shadow-md p-3 text-center flex flex-col order-2 lg:order-4 animate-fade-in-down hover:bg-gray-50"
         style="animation-delay: 0.2s"
+        :to="{ name: 'AllResponses' }"
       >
         <h3 class="text-2xl font-semibold">Total Responses</h3>
         <div
@@ -45,7 +47,20 @@
         >
           {{ data.totalAnswers }}
         </div>
-      </div>
+      </router-link>
+
+
+<!--      <div-->
+<!--        class="bg-white shadow-md p-3 text-center flex flex-col order-2 lg:order-4 animate-fade-in-down"-->
+<!--        style="animation-delay: 0.2s"-->
+<!--      >-->
+<!--        <h3 class="text-2xl font-semibold">Total Responses</h3>-->
+<!--        <div-->
+<!--          class="text-8xl pb-4 font-semibold flex-1 flex items-center justify-center"-->
+<!--        >-->
+<!--          {{ data.totalAnswers }}-->
+<!--        </div>-->
+<!--      </div>-->
       <div
         class="row-span-2 animate-fade-in-down order-3 lg:order-1 bg-white shadow-md p-4"
       >
@@ -174,10 +189,10 @@ import { useStore } from "vuex";
 
 const store = useStore();
 
-const loading = computed(() => store.state.dashboard.loading);
-const data = computed(() => store.state.dashboard.data);
+const loading = computed(() => store.state.survey.dashboard.loading);
+const data = computed(() => store.state.survey.dashboard.data);
 
-store.dispatch("getDashboardData");
+store.dispatch("survey/getDashboardData");
 </script>
 
 <style scoped></style>

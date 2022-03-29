@@ -14,6 +14,6 @@ import {useStore} from "vuex";
 
 const store = useStore();
 
-const notification = computed(() => store.state.notification);
+const notification = computed(() => store.state.survey.notification);
 </script>
 

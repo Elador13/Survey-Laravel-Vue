@@ -57,7 +57,7 @@
             autocomplete="name"
             required="required"
             maxlength="40"
-            class="appearance-none rounded-none  block w-[30%] px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+            class="appearance-none rounded-none block w-full sm:w-[35%] px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
             placeholder="Please write your Name"
           />
         </div>
@@ -70,14 +70,14 @@
             type="email"
             maxlength="50"
             autocomplete="email"
-            class="appearance-none rounded-none  block w-[30%] px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+            class="appearance-none rounded-none block w-full sm:w-[35%] py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
             placeholder="Please write your e-mail"
           />
         </div>
 
         <button
           type="submit"
-          class="inline-flex justify-center mt-5 py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+          class="w-full sm:w-auto inline-flex justify-center mt-5 py-2 px-4 border border-transparent shadow-sm text-md sm:text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
         >
           Submit
         </button>
@@ -98,18 +98,18 @@ const store = useStore();
 
 const showModal = ref(false)
 
-const loading = computed(() => store.state.currentSurvey.loading);
-const survey = computed(() => store.state.currentSurvey.data);
+const loading = computed(() => store.state.survey.currentSurvey.loading);
+const survey = computed(() => store.state.survey.currentSurvey.data);
 
 const surveyFinished = ref(false);
 const answers = ref({});
 const respondent = ref({})
 
-store.dispatch('getSurveyBySlug', route.params.slug).catch(err => {});
+store.dispatch('survey/getSurveyBySlug', route.params.slug).catch(err => {});
 
 function submitSurvey() {
   // console.log(JSON.stringify(answers.value, undefined, 2));
-  store.dispatch('saveSurveyAnswer', {
+  store.dispatch('survey/saveSurveyAnswer', {
     surveyId: survey.value.id,
     respondent: respondent.value,
     answers: answers.value

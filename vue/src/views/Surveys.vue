@@ -79,9 +79,12 @@ import { computed } from "vue";
 import PageComponent from "../components/PageComponent.vue";
 import SurveyListItem from "../components/SurveyListItem.vue";
 
-const surveys = computed(() => store.state.surveys);
+const surveys = computed(() => store.state.survey.surveys);
 
-store.dispatch("getSurveys");
+// in order not to make a request every time
+if (!store.state.survey.surveys.data.length) {
+  store.dispatch("survey/getSurveys");
+}
 
 function deleteSurvey(survey) {
   if (
@@ -89,9 +92,9 @@ function deleteSurvey(survey) {
       `Are soy sure you want to delete this survey? Operation can't be undone!`
     )
   ) {
-    store.dispatch('deleteSurvey', survey.id)
+    store.dispatch('survey/deleteSurvey', survey.id)
       .then(() => {
-        store.dispatch('getSurveys')
+        store.dispatch('survey/getSurveys')
       });
   }
 }
@@ -102,6 +105,6 @@ function getForPage(ev, link) {
     return
   }
 
-  store.dispatch('getSurveys', {url: link.url})
+  store.dispatch('survey/getSurveys', {url: link.url})
 }
 </script>
